@@ -28,10 +28,10 @@ def read_image(file_path):
                 ### if piexl<127 then it becomes 0
                 ### else it becomes 1
                 piexl=int(piexl[0])
-                '''if piexl<127:
+                if piexl<127:
                     piexl=0
                 else:
-                    piexl=1'''
+                    piexl=1
                 piexl_all.append(piexl)
                 index+=struct.calcsize(">B")
         piexl_all=np.array(piexl_all)

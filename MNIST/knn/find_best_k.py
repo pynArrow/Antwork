@@ -123,10 +123,10 @@ def calc_precision(res,test_labels):
 
 if __name__ == '__main__':
 
-    image_train_file_path = r"D:\VS-Code-python\dataset\minst\train-images.idx3-ubyte"
-    label_train_file_path = r"D:\VS-Code-python\dataset\minst\train-labels.idx1-ubyte"
-    image_test_file_path = r"D:\VS-Code-python\dataset\minst\t10k-images.idx3-ubyte"
-    label_test_file_path = r"D:\VS-Code-python\dataset\minst\t10k-labels.idx1-ubyte"
+    image_train_file_path = r"D:\VS-Code-python\dataset\mnist\train-images.idx3-ubyte"
+    label_train_file_path = r"D:\VS-Code-python\dataset\mnist\train-labels.idx1-ubyte"
+    image_test_file_path = r"D:\VS-Code-python\dataset\mnist\t10k-images.idx3-ubyte"
+    label_test_file_path = r"D:\VS-Code-python\dataset\mnist\t10k-labels.idx1-ubyte"
     image_train_piexl = read_image(image_train_file_path)
     label_train = read_label(label_train_file_path)
     image_test_piexl = read_image(image_test_file_path)
