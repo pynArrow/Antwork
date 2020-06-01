@@ -1,5 +1,9 @@
 # R-CNN——Ross Girshick
 
+论文：《Rich feature hierarchies for accurate oject detection and semantic segmentation》
+
+[TOC]
+
 ## 简介
 
 R-CNN（region with CNN features）是一类用于处理序列数据的神经网络。R-CNN是使用深度学习进行目标检测的鼻祖论文（Rich feature hierarchies for accurate object detection and semantic segmentation），此后诸如Fast-RCNN和Faster-RCNN都是基于RCNN的改进。
@@ -23,20 +27,7 @@ R-CNN（region with CNN features）是一类用于处理序列数据的神经网
 
 ![这里写图片描述](https://img-blog.csdn.net/20160405215259014)
 
-## RCNN基本原理
-
-目标检测主要有两个任务：其一，对于图像中的每个物体，判断出物体的类型，即分类；其二，判断物体的位置，一般选用回归的方法实现。
-
-![img](https://img-blog.csdn.net/20180502184835184)
-
-* 评估分类：准确率
-* 评估定位：IoU
-
-整体框架：
-
-![img](https://images2015.cnblogs.com/blog/1093303/201705/1093303-20170504113229570-69371857.png)
-
-### 名词解释
+## 名词解释
 
 IoU：intersaction over union
 
@@ -50,11 +41,28 @@ Region Proposal：候选区
 
 fine-tune：微调
 
+mAP：mean average precision。
+
+## RCNN基本原理
+
+目标检测主要有两个任务：其一，对于图像中的每个物体，判断出物体的类型，即分类；其二，判断物体的位置，一般选用回归的方法实现。
+
+![img](https://img-blog.csdn.net/20180502184835184)
+
+* 评估分类：准确率
+* 评估定位：IoU
+
+整体框架：
+
+![img](https://images2015.cnblogs.com/blog/1093303/201705/1093303-20170504113229570-69371857.png)
+
+### 微调（fine-tune）
+
+采用ImageNet上训练好的模型，然后在PASCAL VOC数据集上微调。这是因为ImageNet上有大量数据集，用CNN学习特征后在小规模数据集上规模化训练。
+
 ### 候选区域的生成
 
 生成候选区的方法有：objectness、selective search、category-independen object proposals、constrained parametric min-cuts(CPMC)、multi-scale combinatorial grouping（MCG）、Ciresan等。R-CNN选择的是selective search。
-
-关于候选框的生成，可以参考PAMI2015的“What makes for effective detection proposals？”。
 
 <img src="https://img-blog.csdn.net/20180502185009252" alt="img" style="zoom:50%;" />
 
@@ -63,8 +71,10 @@ fine-tune：微调
 使用Selective Search方法从一张图像生成约2000-3000个候选区域。基本思路：
 
 1. 使用过分割手段，将图像分为小区域。
-2. 查看现有线区域，**合并可能性最高的两个区域**，从发直到整张图像合并成一个区域位置。
+2. 查看现有区域，**合并可能性最高的两个区域**，从发直到整张图像合并成一个区域位置。
 3. 输出候选区
+
+通过Selective Search产生的候选框大小不一，RCNN将所有输入统一变换成227*227的尺寸，在变换还添加了边框。
 
 * **区域的合并**
 
@@ -129,6 +139,10 @@ IoU的输出：
 
 同样使用AlexNet，最后一层输出21维（20种类+1背景）。学习率0.001。
 
+* **框架精简**
+
+作者发现同时移除fc6和fc7在fine-tune之前并没有很大损失，所以得出结论：pool5学习了泛化能力，而能力的提升则是通过fine-tune。
+
 ### 类别判断
 
 * **SVM分类器**
@@ -141,9 +155,17 @@ IoU的输出：
 
 * **hard negative mining**
 
-hard negative mining解决的是负样本的训练问题。如果仅仅将随机创建的、不与正样本重叠的bounding box作为负样本，训练出的分类器并不好用，会抛出一堆错误的正样本（负样本不是bounding box中学习的负样本，于是错误地预测为正样本。
+hard negative mining解决的是负样本的训练问题。如果仅仅将随机创建的、不与正样本重叠的bounding box作为负样本，训练出的分类器并不好用，会抛出一堆错误的正样本。**负样本不是bounding box中学习的负样本，于是错误地预测为正样本**。
 
 hard negative就是当错误检测到patch（特征图中的块）时，明确地从patch中创建负样本，并添加到训练集中。当再次训练后，分类器就会不断表现得更好。
+
+* **mAP**
+
+作为分类效果的评价指标。
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20181210155409619.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2JyaWJsdWU=,size_16,color_FFFFFF,t_70)
+
+即每一个类别的AP平均値。具体见[目标检测中的mAP是什么含义？](https://www.zhihu.com/question/53405779)。
 
 ### 位置精修
 
