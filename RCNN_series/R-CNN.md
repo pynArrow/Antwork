@@ -29,9 +29,12 @@ R-CNN（region with CNN features）是一类用于处理序列数据的神经网
 
 ![img](https://img-blog.csdn.net/20180502184835184)
 
+* 评估分类：准确率
+* 评估定位：IoU
+
 整体框架：
 
-<img src="https://img-blog.csdnimg.cn/20190524205656120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3OTcwMjI0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" style="zoom:80%;" />
+![img](https://images2015.cnblogs.com/blog/1093303/201705/1093303-20170504113229570-69371857.png)
 
 ### 名词解释
 
