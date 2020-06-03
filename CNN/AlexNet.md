@@ -94,7 +94,7 @@ AlexNet采用两个GPU并行训练。先回到开始介绍的网络结构图，�
 
 <img src="https://pic4.zhimg.com/v2-c06c669bfd7c5b5bacb782d946c9eafb_1200x500.jpg" alt="AlexNet的三点革命性启示" style="zoom:50%;" />
 
-* **局部响应归一化层Local Response Normalization**
+### 局部响应归一化层Local Response Normalization
 
 > ##### 为什么要引入LRN层？
 >
