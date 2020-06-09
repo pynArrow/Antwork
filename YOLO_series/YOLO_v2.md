@@ -42,27 +42,67 @@ $$d(box,centroid)=1-IOU(box,centroid)$$
 
 #### direct location prediction
 
+RPN网络预测边界框位置时
 
+$$x=(t_x*w_a)+x_a\\y=(t_y*h_a)+y_a$$
 
-#### fine-grained features
+其中$(x,y)$为预测框，$(t_x,t_y)$是偏移值，$(w_a,h_a)$为GT的尺寸，$(x_a,y_a)$是GT的中心坐标。
 
+yolo2弃用了这种方式，yolo2生成的5个anchorbox中，每个box预测5个坐标，$t_x,t_y,t_w,t_h,t_o$。
 
+$$b_x=\sigma(t_x)+c_x\\b_y=\sigma(t_y)+c_y\\b_w=p_we^{t_w}\\b_h=p_he^{t_h}$$
+
+其中网格相对于图片的左上角坐标是$(c_x, c_y)$，边框的宽度和高度是$p_w,p_h$，$\sigma(x)$是Sigmoid激活函数。如下图，虚线框为GT，蓝色框为预测box。
+
+![img](https://img-blog.csdnimg.cn/20181204100032773.png)
+
+#### fine-grained features（细粒度特征）
+
+主要是提出了passthrough层，将较高分辨率的特征与较低分辨率的特征连接起来 。比如26*26\*26的特征图变为13\*13\*2048的特征图，使得后续网络可以在这个特征图上运行。
 
 #### multi-scale training
 
+每10个batches，网络将随机选取新的图片尺寸。由于模型下采样的factor为32，故随机选取的图片尺寸在32的倍数中选择，320,352，···，608。这使得网络能够预测不同分辨率上的物体。
 
+![img](https://img-blog.csdnimg.cn/20181204102345242.png)
 
 ### Faster
 
 #### darknet-19
 
+与VGG类似，作者使用3×3的滤波器，在每个池化操作后将通道数加一倍。使用全局average pooling做预测，在3×3的卷积中间使用1×1的滤波器来压缩特征图。作者也使用了BN来稳住训练，加速收敛，以及正则化模型。
+
+
+![img](https://img-blog.csdnimg.cn/20181204104129436.png)
+
 #### training for classification
+
+在有1000类别的ImageNet数据集上使用随机梯度下降（stochastic gradient descent）训练了160epochs，初始学习率0.1。使用了一些数据增强技巧，如随机裁剪（random crops），旋转，色度、亮度的调整等。
+
+在224*224的数据集上初始化网络后，微调到448\*448的尺寸。10个epochs，初始学习率设为0.001 。由此获得的top-1精度是76.5%，top-5准确率为93.3%。
 
 #### training for detection
 
+对于VOC，预测5个boxes，每个box有5个坐标和20个类别，所以一共需要125个filter。
+
 ### Stronger
+
+YOLO9000提出了在分类和检测数据上共同训练的方法。
 
 #### hierarchical classification
 
+显然分类和检测数据标签并不全是互斥的，所以不能直接放入softmax。ImageNet的标签是从WordNet中提取的，WordNet是有向图结构，通过构造一个层级树（hierarchical tree）来简化问题。
+
 #### joint classification and detection
 
+利用Joint training，YOLO9000使用COCO中的检测数据来学习找到图像中的物体，使用ImageNet中的数据来学习分类图像中的物体。
+
+
+
+reference：
+
+[YOLOv2 论文学习](https://blog.csdn.net/calvinpaean/article/details/84772908?ops_request_misc=%7B%22request%5Fid%22%3A%22159166428619195162554443%22%2C%22scm%22%3A%2220140713.130102334..%22%7D&request_id=159166428619195162554443&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-3-84772908.nonecase&utm_term=yolo+v2)
+
+[YOLO v2学习总结](https://blog.csdn.net/ft_sunshine/article/details/98682310?ops_request_misc=%7B%22request%5Fid%22%3A%22159166428619195162554443%22%2C%22scm%22%3A%2220140713.130102334..%22%7D&request_id=159166428619195162554443&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-98682310.nonecase&utm_term=yolo+v2)
+
+s
