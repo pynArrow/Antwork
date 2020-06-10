@@ -61,3 +61,15 @@ SVM基本原理
 * 6.1
 
 Fast RCNN & Faster RCNN
+
+* 6.4
+
+GoogLeNet
+
+* 6.6
+
+YOLO v1
+
+* 6.8
+
+YOLOv2 YOLO9000
