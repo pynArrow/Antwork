@@ -105,4 +105,3 @@ reference：
 
 [YOLO v2学习总结](https://blog.csdn.net/ft_sunshine/article/details/98682310?ops_request_misc=%7B%22request%5Fid%22%3A%22159166428619195162554443%22%2C%22scm%22%3A%2220140713.130102334..%22%7D&request_id=159166428619195162554443&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-98682310.nonecase&utm_term=yolo+v2)
 
-s

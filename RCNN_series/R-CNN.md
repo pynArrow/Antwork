@@ -109,7 +109,7 @@ IoU的输出：
 
 <img src="https://img-blog.csdn.net/20180105151311520?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZmVuZG91YmFzYW9uaWFu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="img" style="zoom:50%;" />
 
-- **非极大值抑制算法**
+- **非极大值抑制算法(non maximum suppression)**
 
 用于对生成的大量候选框进行后处理，去除冗余的候选框。如下图。
 
