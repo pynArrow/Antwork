@@ -24,9 +24,9 @@ YOLOv2首先在448*448分辨率的ImageNet上微调分类网络，总共10个epo
 
 #### convolutional with anchor boxes
 
-yolov1直接使用全连接层来预测边框的位置。在v2中，作者移除了YOLO中的全连接层，借鉴Faster RCNN使用anchor boxes来预测边框。经过卷积层后得到13\*13的特征图，每个cell预测9个建议框，总共预测13 * 13 * 9 = 1521个boxes。
+作者移除了YOLO中的全连接层，借鉴Faster RCNN使用anchor boxes来预测边框。经过卷积层后得到13\*13的特征图，每个cell预测9个建议框，总共预测13\*13\*9 = 1521个boxes。
 
-对于YOLOv1，每个cell都预测2个boxes，每个boxes包含5个值：(x,y,w,h,c)(x, y, w, h, c)(x,y,w,h,c) ，前4个值是边界框位置与大小，最后一个值是置信度（confidence scores，包含两部分：含有物体的概率以及预测框与ground truth的IOU）。但是每个cell只预测一套分类概率值（class predictions，其实是置信度下的条件概率值）,供2个boxes共享。YOLOv2使用了anchor boxes之后，每个位置的各个anchor box都单独预测一套分类概率值，这和SSD比较类似（但SSD没有预测置信度，而是把background作为一个类别来处理）。
+YOLOv2使用了anchor boxes之后，每个位置的各个anchor box都单独预测一套分类概率值，这和SSD比较类似（但SSD没有预测置信度，而是把background作为一个类别来处理）。
 
 #### dimension clusters
 
