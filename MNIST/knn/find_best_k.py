@@ -142,20 +142,11 @@ if __name__ == '__main__':
 
     for k in range(1, 15):
         print('k='+str(k))
-
-        #start_time = time.clock()
         pre_label = knn_all(k,image_train_piexl,label_train,image_test_piexl)
-        #end_time = time.clock()
-        
         precision = calc_precision(pre_label,label_test)
-        #time = end_time-start_time
-
         print("precision:"+str(precision))
-        #print("running time"+str(time))
-
         pred.append(precision)
 
-    print(pred)
     plt.plot(np.arange(k), pred)
     plt.savefig('k.jpg')
     plt.show()

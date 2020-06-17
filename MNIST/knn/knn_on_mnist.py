@@ -19,14 +19,10 @@ def read_image(file_path):
     img_piexl=[]
     for i in range(num_images):
         piexl_all=[]
-        for j in range(num_columns):
-            for k in range(num_rows):
+        for _ in range(num_columns):
+            for __ in range(num_rows):
                 piexl=struct.unpack_from(">B",buf,index)
-                ### This way using the original piexl
-                #piexl=int(piexl[0])
-                ### This way using the processed piexl
-                ### if piexl<127 then it becomes 0
-                ### else it becomes 1
+
                 piexl=int(piexl[0])
                 if piexl<127:
                     piexl=0
@@ -36,14 +32,7 @@ def read_image(file_path):
                 index+=struct.calcsize(">B")
         piexl_all=np.array(piexl_all)
         img_piexl.append(piexl_all)
-        """
-        print(piexl_all)
-        piexl_all=piexl_all.reshape(28,28)
-        fig=plt.figure()
-        plotwindow=fig.add_subplot(111)
-        plotwindow.imshow(piexl_all,cmap="gray")
-        plt.show()
-        """
+
         if i%1000==0:
             print(str(i)+"images have been processed")
     binfile.close()
@@ -56,7 +45,7 @@ def read_label(file_path):
     binfile = open(file_path,"rb")
     buf = binfile.read()
     index=0
-    magic, num_items=struct.unpack_from(">II",buf,index)
+    _, num_items=struct.unpack_from(">II",buf,index)
     print("number of labels:"+str(num_items))
     index+=struct.calcsize(">II")
     label_num=[]
@@ -133,15 +122,13 @@ if __name__ == '__main__':
     label_test = read_label(label_test_file_path)
     print("reading all files completed!")
 
-    pred = []
-
     k = 5
     print('k='+str(k))
-
+    '''
     image_test_piexl = image_test_piexl[:2000]
-    image_train_piexl = image_train_piexl[:20000]
-    label_train = label_train[:20000]
-    label_test = label_test[:2000]
+    image_train_piexl = image_train_piexl[:40000]
+    label_train = label_train[:40000]
+    label_test = label_test[:2000]'''
 
     start_time = time.clock()
     pre_label = knn_all(k,image_train_piexl,label_train,image_test_piexl)
@@ -152,6 +139,3 @@ if __name__ == '__main__':
 
     print("precision:"+str(precision))
     print("running time"+str(time))
-
-    pred.append(precision)
-

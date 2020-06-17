@@ -1,6 +1,6 @@
 # GoogLeNet
 
-之所以名为“GoogLeNet”而非“GoogleNet”，据说是为了向早期的LeNet致敬。
+之所以名为“GoogLeNet”而非“GoogleNet”，据说是为了向LeNet致敬。
 
 [TOC]
 

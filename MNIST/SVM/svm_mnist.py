@@ -9,7 +9,7 @@ label_train_file_path = r"D:\VS-Code-python\dataset\mnist\train-labels.idx1-ubyt
 image_test_file_path = r"D:\VS-Code-python\dataset\mnist\t10k-images.idx3-ubyte"
 label_test_file_path = r"D:\VS-Code-python\dataset\mnist\t10k-labels.idx1-ubyte"
 
-TRAIN_ITEMS = 10000
+TRAIN_ITEMS = 50000
 TEST_ITEMS = 10000
 
 def loadData():

@@ -342,7 +342,7 @@ $$\alpha_1y_1+\alpha_2y_2=-\Sigma_{i\neq1,2}^n \alpha_iy_i= C$$
 
 两边同时乘以$y_1$，得
 
-$$\alpha_1=Cy_1-\alpha_2y_2y_1\\\alpha_1^2=(k-\alpha_2y_2)^2=C^2-2C\alpha_2y_2+\alpha_2^2\\2y_1y_2\alpha_1\alpha_2K_{12}=2(Cy_2-\alpha_2)\alpha_2K_{12}\\2y_1\alpha_1v_1=2(\xi_i-\alpha_2y_2)v_1$$
+$$\alpha_1=Cy_1-\alpha_2y_2y_1\\\alpha_1^2=(C-\alpha_2y_2)^2=C^2-2C\alpha_2y_2+\alpha_2^2\\2y_1y_2\alpha_1\alpha_2K_{12}=2(Cy_2-\alpha_2)\alpha_2K_{12}\\2y_1\alpha_1v_1=2(\xi_i-\alpha_2y_2)v_1$$
 
 带入到目标函数中，化简得
 
