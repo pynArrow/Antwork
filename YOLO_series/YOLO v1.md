@@ -35,6 +35,9 @@ YOLO系：one-stage。只使用一个CNN网络直接预测不同目标的位置�
   * TP: IoU>0.5的检测框数量（同一Ground Truth只计算一次）
   * FP: IoU<=0.5的检测框，或者是检测到同一个GT的多余检测框的数量
   * FN: 没有检测到的GT的数量
+* grid cell：YOLO将整个图像划分为19*19的格子。其中每个格子就是一个grid cell。
+* bounding box：网络预测的边框格。
+* ground truth：标定的边框格。
 
 ## 原理分析
 

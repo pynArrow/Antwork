@@ -1,5 +1,7 @@
 # ZFNet——Zeiler&Fergus
 
+本文主要是对论文[Visualizing and Understanding Convolutional Networks](https://arxiv.org/abs/1311.2901)的学习。
+
 [TOC]
 
 ## 简介

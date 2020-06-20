@@ -14,23 +14,23 @@ YOLO9000是CVPR2017的最佳论文提名。这篇论文一共介绍了YOLOv2和Y
 
 #### batch normalization
 
-在GOOGLeNet中提到过。BN对每一个mini-batch数据的内部进行标准化（normalization），使输出规范化到N（0,1）的正态分布，减少了内部神经元分布的改变。
+在GoogLeNet中提到过。BN对每一个mini-batch数据的内部进行标准化（normalization），使输出规范化到N（0,1）的正态分布，减少了内部神经元分布的改变。
 
 在所有卷积层后增加一个BN，可以有效提升收敛能力，而不需要其他形式的正则化。同时在去除dropout后不必担心过拟合问题。
 
 #### high resolution classifier
 
-YOLOv2首先在448*448分辨率的ImageNet上微调分类网络，总共10个epochs。这使得网络有时间调整filter，以在更高分辨率的输入上运行。然后在检测数据上微调此输出网络。
+YOLOv2首先在224\*224分辨率的ImageNet数据集上跑160个epoch，然后在448*448分辨率的ImageNet上微调分类网络，总共10个epochs。这使得网络有时间调整filter，以在更高分辨率的输入上运行。然后在检测数据上微调此输出网络。
 
 #### convolutional with anchor boxes
 
-作者移除了YOLO中的全连接层，借鉴Faster RCNN使用anchor boxes来预测边框。经过卷积层后得到13\*13的特征图，每个cell预测9个建议框，总共预测13\*13\*9 = 1521个boxes。
+作者移除了YOLO中的全连接层，借鉴Faster RCNN使用anchor boxes来预测边框。经过卷积层后得到13\*13的特征图，每个grid cell预测9个建议框，总共预测13\*13\*9 = 1521个boxes。
 
 YOLOv2使用了anchor boxes之后，每个位置的各个anchor box都单独预测一套分类概率值，这和SSD比较类似（但SSD没有预测置信度，而是把background作为一个类别来处理）。
 
 #### dimension clusters
 
-在Faster RCNN中，anchor box的长度是手动设定的，不一定适合所有尺寸的物体。而YOLOv2采用kmeans聚类方法对训练集中的边界框做了聚类分析，采取的评判标准并非传统的欧式距离，因为这会使较大的box产生更大的距离。实际上作者采用IOU来评判，使其与尺度无关。
+在Faster RCNN中，anchor box的长度是手动设定的，不一定适合所有尺寸的物体。而YOLOv2采用kmeans聚类方法对训练集中的bounding box做了聚类分析得到anchor box，采取的评判标准并非传统的欧式距离，因为欧氏距离会使较大的box产生更大的距离。作者采用IOU来评判，使其与尺度无关。
 
 $$d(box,centroid)=1-IOU(box,centroid)$$
 
@@ -46,19 +46,19 @@ RPN网络预测边界框位置时
 
 $$x=(t_x*w_a)+x_a\\y=(t_y*h_a)+y_a$$
 
-其中$(x,y)$为预测框，$(t_x,t_y)$是偏移值，$(w_a,h_a)$为GT的尺寸，$(x_a,y_a)$是GT的中心坐标。
+其中$(x,y)$为预测框中心坐标，$(t_x,t_y)$是**offset**（RPN中预测的是偏移值），$(w_a,h_a)$为GT的尺寸，$(x_a,y_a)$是GT的中心坐标。
 
-yolo2弃用了这种方式，yolo2生成的5个anchorbox中，每个box预测5个坐标，$t_x,t_y,t_w,t_h,t_o$。
+yolo2弃用了这种方式，yolo2生成的5个anchor box中，每个box预测5个坐标，$t_x,t_y,t_w,t_h,t_o$此五个值都是相对于GT的offset。
 
 $$b_x=\sigma(t_x)+c_x\\b_y=\sigma(t_y)+c_y\\b_w=p_we^{t_w}\\b_h=p_he^{t_h}$$
 
-其中网格相对于图片的左上角坐标是$(c_x, c_y)$，边框的宽度和高度是$p_w,p_h$，$\sigma(x)$是Sigmoid激活函数。如下图，虚线框为GT，蓝色框为预测box。
+其中grid cell相对于图片的左上角坐标是$(c_x, c_y)$，边框的宽度和高度是$p_w,p_h$，$\sigma(x)$是Sigmoid函数。如下图，虚线框为GT，蓝色框为预测box。
 
 ![img](https://img-blog.csdnimg.cn/20181204100032773.png)
 
 #### fine-grained features（细粒度特征）
 
-主要是提出了passthrough层，将较高分辨率的特征与较低分辨率的特征连接起来 。比如26*26\*26的特征图变为13\*13\*2048的特征图，使得后续网络可以在这个特征图上运行。
+主要是提出了passthrough层，将较高分辨率的特征与较低分辨率的特征连接起来 。比如26*26\*26的特征图变为13\*13\*2048的特征图，使得后续网络可以在这个特征图上运行。这样做的原因在于虽然13\*13的feature map对于预测大的object以及足够了，但是对于预测小的object就不一定有效。也容易理解，越小的object，经过层层卷积和pooling，可能到最后都不见了，所以通过合并前一层的size大一点的feature map，可以有效检测小的object。
 
 #### multi-scale training
 
@@ -87,17 +87,17 @@ $$b_x=\sigma(t_x)+c_x\\b_y=\sigma(t_y)+c_y\\b_w=p_we^{t_w}\\b_h=p_he^{t_h}$$
 
 ### Stronger
 
-YOLO9000提出了在分类和检测数据上共同训练的方法。
+YOLO9000提出了在分类和检测数据上共同训练（joint classification and detection）的方法。
 
 #### hierarchical classification
 
 显然分类和检测数据标签并不全是互斥的，所以不能直接放入softmax。ImageNet的标签是从WordNet中提取的，WordNet是有向图结构，通过构造一个层级树（hierarchical tree）来简化问题。
 
+> “分类和检测数据标签并不全是互斥的”，这是由于分类数据集和检测数据集的不同所导致的。通常检测的数据集对于类别精准的要求更小——只需要笼统的类，如“人类”、“狗”等就足够了。但是分类数据集，比如ImageNet，则分类更细——如“中华田园犬”等。
+
 #### joint classification and detection
 
-利用Joint training，YOLO9000使用COCO中的检测数据来学习找到图像中的物体，使用ImageNet中的数据来学习分类图像中的物体。
-
-
+利用Joint training，直观来说，YOLO9000使用COCO中的检测数据来学习找到图像中的物体，使用ImageNet中的数据来学习分类图像中的物体。
 
 reference：
 
