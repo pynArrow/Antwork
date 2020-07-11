@@ -1043,13 +1043,122 @@ priority_queue<int, vector<int>, greater<int>> obj;	//声明最小优先队列
 
 * 自定义compare方法
 
+一、重载小于运算符
+
+```cpp
+
+```
+
+### set 集合
+
+set是关联容器的一种，是已排序的集合。set和multiset的区别在于set中的元素不能重复，而multiset中允许存在重复的元素。
+
+需要注意的是，set中的元素最好不要直接修改。因为直接修改元素，并不会引起容器的重新排序，所以容器中的有序性被破坏。如果一定要修改，可以先删除该元素，然后插入新元素。
+
+* 头文件
+
+```cpp
+#include<set>
+template < class Key,
+			class Pred = less<Key>,
+			class A = allocator<Key> >
+class set {...}
+```
+
+* 常用api
+
+1. set<type\> obj
+
+```cpp
+set<int> obj;
+```
+
+2. obj.begin()
+
+返回容器的第一个元素
+
+3. obj.end()
+
+返回容器的最后一个元素的下一位
+
+4. obj.clean()
+
+删除容器中的所有元素
+
+5. obj.empty()
+
+判断容器是否为空
+
+6. obj.max_size()
+
+返回容器可能包含的元素最大个数
+
+7. obj.size()
+
+返回当前容器中元素个数
+
+8. obj,insert(elem)
+
+向容器中插入元素
+
+9. obj.count(elem)
+
+返回elem在元素中出现的次数，可以用来判断元素是否存在
+
+10. obj.equal_range(elem)
+
+返回一个pair（其中元素为迭代器），可以用first和second取出。分别表示第一个大于等于elem的元素和第一个大于elem的元素。
+
+11. obj.erase(iterator)
+
+删除iterator位置的元素
+
+```cpp
+obj.erase(iterator);			//删除iterator指向的值
+obj.erase(first, second);		//删除first和second之间的值
+obj.erase(key_value);			//删除键值key_value的元素
+```
+
+12. obj.find(elem)
+
+返回给定值的iterator，如果没找到返回obj.end()
+
+13. obj.lower_bound(elem)
+
+返回第一个大于等于elem的iterator
+
+14. obj.upper_bound(elem)
+
+返回第一个大于elem的iterator
+
+* 自定义排序
+
+一、重载()运算符
+
+```cpp
+struct cmp{
+    bool operator()(const data_type &a, const data_type &b){
+        return a.x-b.x;
+    }
+}
+```
+
+二、重载<运算符
+
+```cpp
+struct cmp{
+    int x;
+    bool operator < (const cmp &a) const{
+        return a.x<x;
+    }
+}
+```
 
 
-### pair 
+
+### map
 
 
 
-### set集合
-
-
+### pair
 
